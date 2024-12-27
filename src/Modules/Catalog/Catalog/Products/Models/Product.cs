@@ -7,7 +7,7 @@ namespace Catalog.Products.Models
         public string Name { get; private set; } = default!;
         public List<string> Category { get; private set; } = new List<string>();
         public string Description {get; private set; }
-        public string ImgaeFile { get; private set; }
+        public string ImageFile { get; private set; }
         public decimal Price { get; private set; }
 
         public static Product Create(Guid id, string name, List<string> category, string desc, string imageFile, decimal price)
@@ -21,7 +21,7 @@ namespace Catalog.Products.Models
                 Name = name,
                 Category = category,
                 Description = desc,
-                ImgaeFile = imageFile,
+                ImageFile = imageFile,
                 Price = price
             };
 
@@ -39,7 +39,7 @@ namespace Catalog.Products.Models
             Name = name;
             Category = category;
             Description = desc;
-            ImgaeFile = imageFile;
+            ImageFile = imageFile;
             Price = price;
 
             if(Price != price)
