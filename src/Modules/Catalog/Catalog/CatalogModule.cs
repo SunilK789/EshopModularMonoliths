@@ -1,9 +1,13 @@
 ﻿
 
 using Catalog.Data;
+using Catalog.Seed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Data;
+using Shared.Data.Interceptors;
+using Shared.Data.Seeder;
 
 namespace Catalog
 {
@@ -14,23 +18,20 @@ namespace Catalog
 
             var connectionString = configuration.GetConnectionString("Database");
 
-            services.AddDbContext<CatalogDbContext>(options => options.UseNpgsql(connectionString));
+            services.AddDbContext<CatalogDbContext>(options =>
+            {
+                options.AddInterceptors(new AuditableEntityInterceptors());
+                options.UseNpgsql(connectionString);
+            });
+            services.AddScoped<IDataSeeder, CatalogDataSeeder>();
 
             return services;
         }
         public static IApplicationBuilder UseCatalogModule(this IApplicationBuilder app)
         {
 
-            InitialiseDatabaseAsync(app).GetAwaiter().GetResult();
+            app.UseMigration<CatalogDbContext>();
             return app;
-        }
-
-        private static async Task InitialiseDatabaseAsync(IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
-
-            await context.Database.MigrateAsync();
         }
     }
 }
