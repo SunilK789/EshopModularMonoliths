@@ -1,6 +1,4 @@
-﻿
-
-using Catalog.Data;
+﻿using Catalog.Data;
 using Catalog.Seed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
